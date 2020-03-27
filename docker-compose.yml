@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  blog-postgres:
+    build: ./task2-db
+    container_name: blog-postgres
+    volumes:
+      - blog-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=blog
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=228sanya228
+
+  blog-server:
+    build: ./task2-server
+    container_name: blog-server
+    environment:
+      - DB_SERVER=blog-postgres
+    ports:
+      - 8000:8000
+    links:
+      - blog-postgres
+
+  blog-client:
+    build: ./task2-client
+    container_name: blog-client
+    ports:
+      - 5000:5000
+    links:
+      - blog-server
+
+
+volumes:
+  blog-data:
